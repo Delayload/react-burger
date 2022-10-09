@@ -1,0 +1,38 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 294px);
+    overflow-y: auto;
+}
+
+.item > div{
+    width: 100%;
+}
+
+.priceBlock {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.price {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.priceIcon {
+    display: flex;
+}
+
+.priceIcon svg {
+    width: 33px;
+    height: 33px;
+}

@@ -1,10 +1,25 @@
 *,
 *::after,
 *::before {
-  box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 body {
-  font-family: Inter;
-  color: var(--color-text);
+    font-family: Inter;
+    color: var(--color-text);
 }
