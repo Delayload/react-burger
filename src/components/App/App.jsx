@@ -1,8 +1,8 @@
 import React from "react";
-import {API_URL} from "./utils/constants";
-import AppHeader from "./components/AppHeader/AppHeader";
-import BurgerIngredients from "./components/BurgerIngredients/BurgerIngredients";
-import BurgerConstructor from "./components/BurgerConstructor/BurgerConstructor";
+import {API_URL} from "../../utils/constants";
+import AppHeader from "../AppHeader/AppHeader";
+import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
+import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import styles from "./App.module.css";
 
 function App() {
