@@ -66,19 +66,21 @@ function BurgerIngredients({data}) {
                 <div className={styles.categories}>
                     {
                         Object.keys(categories).map((key, index) => {
-                            return categories[key].items.length !== 0 &&
+                            return categories[key].items.length !== 0 && (
                                 <div key={key} ref={el => itemsRef.current[index] = el}>
                                     <IngredientsList items={categories[key].items} title={categories[key].title}/>
                                 </div>
+                            )
                         })
                     }
                 </div>
             </section>
             {
-                currentIngredient
-                && <Modal title={"Детали ингредиента"} onClose={handleCloseModal}>
-                    <IngredientDetails {...currentIngredient}/>
-                </Modal>
+                currentIngredient && (
+                    <Modal title={"Детали ингредиента"} onClose={handleCloseModal}>
+                        <IngredientDetails {...currentIngredient}/>
+                    </Modal>
+                )
             }
         </>
     );

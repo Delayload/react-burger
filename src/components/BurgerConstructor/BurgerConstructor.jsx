@@ -24,15 +24,17 @@ function BurgerConstructor({data}) {
             <section className={cn(styles.wrapper, 'pt-25')}>
                 <ul className={'mb-10', styles.list}>
                     {
-                        bun &&  <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
-                            <ConstructorElement
-                                type="top"
-                                isLocked={true}
-                                text={bun.name}
-                                price={bun.price}
-                                thumbnail={bun.image}
-                            />
-                        </li>
+                        bun &&  (
+                            <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
+                                <ConstructorElement
+                                    type="top"
+                                    isLocked={true}
+                                    text={bun.name}
+                                    price={bun.price}
+                                    thumbnail={bun.image}
+                                />
+                            </li>
+                        )
                     }
                     {
                         data && data.map(item => (
@@ -47,15 +49,17 @@ function BurgerConstructor({data}) {
                         ))
                     }
                     {
-                        bun &&  <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
-                            <ConstructorElement
-                                type="bottom"
-                                isLocked={true}
-                                text={bun.name}
-                                price={bun.price}
-                                thumbnail={bun.image}
-                            />
-                        </li>
+                        bun &&  (
+                            <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
+                                <ConstructorElement
+                                    type="bottom"
+                                    isLocked={true}
+                                    text={bun.name}
+                                    price={bun.price}
+                                    thumbnail={bun.image}
+                                />
+                            </li>
+                        )
                     }
                 </ul>
                 <div className={cn(styles.priceBlock, 'mt-10')}>
@@ -68,9 +72,11 @@ function BurgerConstructor({data}) {
                     <Button type="primary" size="large" onClick={handleOpenModal}>Оформить заказ</Button>
                 </div>
             </section>
-            { modalVisible && <Modal onClose={handleCloseModal}>
-                <OrderDetails/>
-            </Modal>}
+            { modalVisible && (
+                <Modal onClose={handleCloseModal}>
+                    <OrderDetails/>
+                </Modal>
+            )}
         </>
     );
 };
