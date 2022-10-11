@@ -2,7 +2,7 @@ import React from "react";
 import cn from "classnames";
 import PropTypes from "prop-types";
 import Ingredient from "./Ingredient/Ingredient";
-import {ingredientType} from "../../../utils/propTypes";
+import {ingredientType} from "../../../utils/types";
 import styles from "./IngredientsList.module.css";
 
 function IngredientsList({title, items, handleOpenModal}) {

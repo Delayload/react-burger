@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import {ingredientType} from "../../utils/propTypes";
+import {ingredientType} from "../../utils/types";
 import styles from "./BurgerConstructor.module.css";
 
 function BurgerConstructor({ingredients}) {

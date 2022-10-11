@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import {CurrencyIcon, Counter} from "@ya.praktikum/react-developer-burger-ui-components";
-import {ingredientType} from "../../../../utils/propTypes";
+import {ingredientType} from "../../../../utils/types";
 import styles from "./Ingredient.module.css";
 
 function Ingredient({ingredient, handleOpenModal}) {
