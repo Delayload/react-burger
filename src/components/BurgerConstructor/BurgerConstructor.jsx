@@ -25,10 +25,8 @@ function BurgerConstructor({ingredients}) {
                 <ul className={'mb-10', styles.list}>
                     {
                         bun &&  (
-                            <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
-                                <div className={styles.itemIconWrapper}>
-                                    <DragIcon type="primary" />
-                                </div>
+                            <li className={cn('ml-4', 'mr-4', styles.item)}>
+                                <div className={styles.itemIconWrapper}></div>
                                 <div className={styles.constructorWrapper}>
                                     <ConstructorElement
                                         type="top"
@@ -42,28 +40,32 @@ function BurgerConstructor({ingredients}) {
                         )
                     }
                     {
-                        ingredients && ingredients.map(item => (
-                            <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)} key={item._id}>
-                                <div className={styles.itemIconWrapper}>
-                                    <DragIcon type="primary" />
-                                </div>
-                                <div className={styles.constructorWrapper}>
-                                    <ConstructorElement
-                                        isLocked={true}
-                                        text={item.name}
-                                        price={item.price}
-                                        thumbnail={item.image}
-                                    />
-                                </div>
-                            </li>
-                        ))
+                        ingredients && (
+                            <ul className={cn(styles.innerList, 'mt-4', 'mb-4')}>
+                                {
+                                    ingredients.map(item => (
+                                        <li className={cn('ml-4', 'mr-4', styles.item)} key={item._id}>
+                                            <div className={styles.itemIconWrapper}>
+                                                <DragIcon type="primary" />
+                                            </div>
+                                            <div className={styles.constructorWrapper}>
+                                                <ConstructorElement
+                                                    isLocked={true}
+                                                    text={item.name}
+                                                    price={item.price}
+                                                    thumbnail={item.image}
+                                                />
+                                            </div>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        )
                     }
                     {
                         bun &&  (
-                            <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
-                                <div className={styles.itemIconWrapper}>
-                                    <DragIcon type="primary" />
-                                </div>
+                            <li className={cn('ml-4', 'mr-4', styles.item)}>
+                                <div className={styles.itemIconWrapper}></div>
                                 <div className={styles.constructorWrapper}>
                                     <ConstructorElement
                                         type="bottom"

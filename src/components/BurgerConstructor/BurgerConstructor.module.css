@@ -7,8 +7,22 @@
 .list {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 294px);
     overflow-y: auto;
+}
+
+.innerList {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 496px);
+    overflow-y: auto;
+}
+
+.innerList > .item {
+    margin-bottom: 16px;
+}
+
+.innerList > .item:last-of-type {
+    margin-bottom: 0;
 }
 
 .item {
@@ -21,6 +35,7 @@
 .itemIconWrapper {
     width: 24px;
     height: 24px;
+    margin-right: 8px;
 }
 
 .constructorWrapper {
