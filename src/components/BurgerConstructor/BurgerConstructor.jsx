@@ -18,6 +18,7 @@ function BurgerConstructor({ingredients}) {
     };
 
     const bun = ingredients && ingredients.find(ingrediend => ingrediend.type === 'bun');
+    const filling = ingredients.filter(ingredient => ingredient.type !== 'bun');
 
     return (
         <>
@@ -43,7 +44,7 @@ function BurgerConstructor({ingredients}) {
                         ingredients && (
                             <ul className={cn(styles.innerList, 'mt-4', 'mb-4')}>
                                 {
-                                    ingredients.map(item => (
+                                    filling.map(item => (
                                         <li className={cn('ml-4', 'mr-4', styles.item)} key={item._id}>
                                             <div className={styles.itemIconWrapper}>
                                                 <DragIcon type="primary" />
