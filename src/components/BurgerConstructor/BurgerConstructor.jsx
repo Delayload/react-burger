@@ -80,15 +80,19 @@ function BurgerConstructor({ingredients}) {
                         )
                     }
                 </ul>
-                <div className={cn(styles.priceBlock, 'mt-10')}>
-                    <div className={cn(styles.price, 'mr-10')}>
-                        <p className={cn("text text_type_digits-medium mr-2")}>610</p>
-                        <div className={cn(styles.priceIcon)}>
-                            <CurrencyIcon/>
+                {
+                    ingredients.length !== 0 && (
+                        <div className={cn(styles.priceBlock, 'mt-10')}>
+                            <div className={cn(styles.price, 'mr-10')}>
+                                <p className={cn("text text_type_digits-medium mr-2")}>610</p>
+                                <div className={cn(styles.priceIcon)}>
+                                    <CurrencyIcon/>
+                                </div>
+                            </div>
+                            <Button type="primary" size="large" onClick={handleOpenModal}>Оформить заказ</Button>
                         </div>
-                    </div>
-                    <Button type="primary" size="large" onClick={handleOpenModal}>Оформить заказ</Button>
-                </div>
+                    )
+                }
             </section>
             { modalVisible && (
                 <Modal onClose={handleCloseModal}>
