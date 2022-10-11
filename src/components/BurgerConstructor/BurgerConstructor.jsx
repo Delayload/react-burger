@@ -1,7 +1,7 @@
 import React from "react";
 import cn from "classnames";
 import PropTypes from "prop-types";
-import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { ConstructorElement, CurrencyIcon, Button, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import {ingredientType} from "../../utils/propTypes";
@@ -26,38 +26,53 @@ function BurgerConstructor({ingredients}) {
                     {
                         bun &&  (
                             <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
-                                <ConstructorElement
-                                    type="top"
-                                    isLocked={true}
-                                    text={bun.name}
-                                    price={bun.price}
-                                    thumbnail={bun.image}
-                                />
+                                <div className={styles.itemIconWrapper}>
+                                    <DragIcon type="primary" />
+                                </div>
+                                <div className={styles.constructorWrapper}>
+                                    <ConstructorElement
+                                        type="top"
+                                        isLocked={true}
+                                        text={bun.name}
+                                        price={bun.price}
+                                        thumbnail={bun.image}
+                                    />
+                                </div>
                             </li>
                         )
                     }
                     {
                         ingredients && ingredients.map(item => (
                             <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)} key={item._id}>
-                                <ConstructorElement
-                                    isLocked={true}
-                                    text={item.name}
-                                    price={item.price}
-                                    thumbnail={item.image}
-                                />
+                                <div className={styles.itemIconWrapper}>
+                                    <DragIcon type="primary" />
+                                </div>
+                                <div className={styles.constructorWrapper}>
+                                    <ConstructorElement
+                                        isLocked={true}
+                                        text={item.name}
+                                        price={item.price}
+                                        thumbnail={item.image}
+                                    />
+                                </div>
                             </li>
                         ))
                     }
                     {
                         bun &&  (
                             <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)}>
-                                <ConstructorElement
-                                    type="bottom"
-                                    isLocked={true}
-                                    text={bun.name}
-                                    price={bun.price}
-                                    thumbnail={bun.image}
-                                />
+                                <div className={styles.itemIconWrapper}>
+                                    <DragIcon type="primary" />
+                                </div>
+                                <div className={styles.constructorWrapper}>
+                                    <ConstructorElement
+                                        type="bottom"
+                                        isLocked={true}
+                                        text={bun.name}
+                                        price={bun.price}
+                                        thumbnail={bun.image}
+                                    />
+                                </div>
                             </li>
                         )
                     }
