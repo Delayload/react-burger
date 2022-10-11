@@ -28,10 +28,7 @@ function BurgerIngredients({data}) {
 
     const categories = data.reduce((acc, item) => {
         if (acc[item.type]) {
-            acc[item.type].items.push({
-                ...item,
-                handleOpenModal,
-            });
+            acc[item.type].items.push(item);
         }
 
         return acc;
@@ -68,7 +65,7 @@ function BurgerIngredients({data}) {
                         Object.keys(categories).map((key, index) => {
                             return categories[key].items.length !== 0 && (
                                 <div key={key} ref={el => itemsRef.current[index] = el}>
-                                    <IngredientsList items={categories[key].items} title={categories[key].title}/>
+                                    <IngredientsList items={categories[key].items} title={categories[key].title} handleOpenModal={handleOpenModal}/>
                                 </div>
                             )
                         })
@@ -78,7 +75,7 @@ function BurgerIngredients({data}) {
             {
                 currentIngredient && (
                     <Modal title={"Детали ингредиента"} onClose={handleCloseModal}>
-                        <IngredientDetails {...currentIngredient}/>
+                        <IngredientDetails ingredient={currentIngredient}/>
                     </Modal>
                 )
             }

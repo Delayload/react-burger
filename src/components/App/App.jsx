@@ -32,7 +32,7 @@ function App() {
                     <BurgerIngredients data={data}/>
                 </div>
                 <div className={styles.wrapper}>
-                    <BurgerConstructor data={data}/>
+                    <BurgerConstructor ingredients={data}/>
                 </div>
             </main>
         </div>

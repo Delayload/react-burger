@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import ingredientType from "../IngredientDetails/IngredientDetails";
+import {ingredientType} from "../../utils/propTypes";
 import styles from "./BurgerConstructor.module.css";
 
-function BurgerConstructor({data}) {
+function BurgerConstructor({ingredients}) {
     const [modalVisible, setModalVisible] = React.useState(null);
     const handleOpenModal = () => {
         setModalVisible(true);
@@ -17,7 +17,7 @@ function BurgerConstructor({data}) {
         setModalVisible(false);
     };
 
-    const bun = data.find(ingrediend => ingrediend.type === 'bun');
+    const bun = ingredients && ingredients.find(ingrediend => ingrediend.type === 'bun');
 
     return (
         <>
@@ -37,7 +37,7 @@ function BurgerConstructor({data}) {
                         )
                     }
                     {
-                        data && data.map(item => (
+                        ingredients && ingredients.map(item => (
                             <li className={cn('ml-4', 'mr-4', 'mb-4', styles.item)} key={item._id}>
                                 <ConstructorElement
                                     isLocked={true}
@@ -82,7 +82,7 @@ function BurgerConstructor({data}) {
 };
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(ingredientType).isRequired,
+    ingredients: PropTypes.arrayOf(ingredientType),
 };
 
 export default BurgerConstructor;
