@@ -12,13 +12,13 @@ function AppHeader() {
                     <li className={styles.item}>
                         <a href="/" className={cn(styles.link, 'p-4')}>
                             <BurgerIcon type={'primary'}/>
-                            <p className={cn('text', 'text_type_main-default', 'ml-2', styles.activeLink)}>Text</p>
+                            <p className={cn('text', 'text_type_main-default', 'ml-2', styles.activeLink)}>Конструктор</p>
                         </a>
                     </li>
                     <li className={styles.item}>
                         <a href="/" className={cn(styles.link, 'p-4')}>
                             <ListIcon type={'secondary'}/>
-                            <p className={cn('text', 'text_type_main-default', 'ml-2')}>Text</p>
+                            <p className={cn('text', 'text_type_main-default', 'ml-2')}>Лента заказов</p>
                         </a>
                     </li>
                 </ul>
@@ -30,7 +30,7 @@ function AppHeader() {
                 <div className={styles.item}>
                     <a href="/" className={cn(styles.link, 'p-4')}>
                         <ProfileIcon type={'secondary'}/>
-                        <p className={cn('text', 'text_type_main-default', 'ml-2')}>Text</p>
+                        <p className={cn('text', 'text_type_main-default', 'ml-2')}>Личный кабинет</p>
                     </a>
                 </div>
             </nav>
