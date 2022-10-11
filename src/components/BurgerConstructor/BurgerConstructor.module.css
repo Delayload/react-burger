@@ -13,7 +13,7 @@
 .innerList {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 496px);
+    max-height: calc(100vh - 496px);
     overflow-y: auto;
 }
 
