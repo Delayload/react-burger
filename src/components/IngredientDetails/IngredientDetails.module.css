@@ -1,0 +1,27 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.image {
+    height: 240px;
+    width: auto;
+}
+
+.about {
+    display: flex;
+    flex-direction: row;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    align-items: center;
+}
+
+.info:last-of-type {
+    margin-right: 0;
+}

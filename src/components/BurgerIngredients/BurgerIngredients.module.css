@@ -1,0 +1,32 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+
+}
+
+.tab {
+    display: flex;
+    width: 100%;
+}
+
+.tab  * {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.categories {
+    display: block;
+    overflow-y: auto;
+    height: calc(100vh - 284px);
+}

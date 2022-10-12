@@ -1,0 +1,70 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: calc(100vh - 296px);
+}
+
+.innerList {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 496px);
+    overflow-y: auto;
+}
+
+.innerList > .item {
+    margin-bottom: 16px;
+}
+
+.innerList > .item:last-of-type {
+    margin-bottom: 0;
+}
+
+.item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.itemIconWrapper {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.constructorWrapper {
+    width: 100%;
+}
+
+.constructorWrapper > div {
+    width: 100%;
+}
+
+.priceBlock {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.price {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.priceIcon {
+    display: flex;
+}
+
+.priceIcon svg {
+    width: 33px;
+    height: 33px;
+}
