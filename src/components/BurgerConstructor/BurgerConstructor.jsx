@@ -51,7 +51,6 @@ function BurgerConstructor({ingredients}) {
                                             </div>
                                             <div className={styles.constructorWrapper}>
                                                 <ConstructorElement
-                                                    isLocked={true}
                                                     text={item.name}
                                                     price={item.price}
                                                     thumbnail={item.image}
