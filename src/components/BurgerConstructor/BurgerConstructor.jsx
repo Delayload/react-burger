@@ -1,14 +1,46 @@
 import React from "react";
 import cn from "classnames";
-import PropTypes from "prop-types";
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import {ingredientType} from "../../utils/types";
+import {IngredientsContext} from "../../services/IngredientsContext";
+import {API_URL} from "../../utils/constants";
 import styles from "./BurgerConstructor.module.css";
+import {SET_ORDER} from "../../actions/actions";
 
-function BurgerConstructor({ingredients}) {
+function BurgerConstructor() {
+    const {constructorData, dispatchContstucorData} = React.useContext(IngredientsContext);
     const [modalVisible, setModalVisible] = React.useState(null);
+
+    const handleOrderButtonClick = () => {
+        fetch(`${API_URL}/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"ingredients": getIngredientsIds()})
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error(response.status)
+            }
+
+            return response.json();
+        }).then(response => {
+            dispatchContstucorData({type: SET_ORDER, payload: response.order.number})
+            handleOpenModal();
+        }).catch(error => {
+            console.log(`Error status ${error}`);
+        })
+    }
+
+    const getIngredientsIds = () => {
+        if (!constructorData.bun || !constructorData.ingredients) {
+            return null;
+        }
+
+        return [ constructorData.bun, ...constructorData.ingredients.map(item => item._id)]
+    }
+
     const handleOpenModal = () => {
         setModalVisible(true);
     };
@@ -17,34 +49,31 @@ function BurgerConstructor({ingredients}) {
         setModalVisible(false);
     };
 
-    const bun = ingredients && ingredients.find(ingrediend => ingrediend.type === 'bun');
-    const filling = ingredients.filter(ingredient => ingredient.type !== 'bun');
-
     return (
         <>
             <section className={cn(styles.wrapper, 'pt-25')}>
-                <ul className={'mb-10', styles.list}>
+                <ul className={cn('mb-10', styles.list)}>
                     {
-                        bun &&  (
+                        constructorData.bun &&  (
                             <li className={cn('ml-4', 'mr-4', styles.item)}>
                                 <div className={styles.itemIconWrapper}></div>
                                 <div className={styles.constructorWrapper}>
                                     <ConstructorElement
                                         type="top"
                                         isLocked={true}
-                                        text={`${bun.name} (верх)`}
-                                        price={bun.price}
-                                        thumbnail={bun.image}
+                                        text={`${constructorData.bun.name} (верх)`}
+                                        price={constructorData.bun.price}
+                                        thumbnail={constructorData.bun.image}
                                     />
                                 </div>
                             </li>
                         )
                     }
                     {
-                        ingredients && (
+                        constructorData.ingredients && (
                             <ul className={cn(styles.innerList, 'mt-4', 'mb-4')}>
                                 {
-                                    filling.map(item => (
+                                    constructorData.ingredients.map(item => (
                                         <li className={cn('ml-4', 'mr-4', styles.item)} key={item._id}>
                                             <div className={styles.itemIconWrapper}>
                                                 <DragIcon type="primary" />
@@ -63,16 +92,16 @@ function BurgerConstructor({ingredients}) {
                         )
                     }
                     {
-                        bun &&  (
+                        constructorData.bun &&  (
                             <li className={cn('ml-4', 'mr-4', styles.item)}>
                                 <div className={styles.itemIconWrapper}></div>
                                 <div className={styles.constructorWrapper}>
                                     <ConstructorElement
                                         type="bottom"
                                         isLocked={true}
-                                        text={`${bun.name} (низ)`}
-                                        price={bun.price}
-                                        thumbnail={bun.image}
+                                        text={`${constructorData.bun.name} (низ)`}
+                                        price={constructorData.bun.price}
+                                        thumbnail={constructorData.bun.image}
                                     />
                                 </div>
                             </li>
@@ -80,15 +109,15 @@ function BurgerConstructor({ingredients}) {
                     }
                 </ul>
                 {
-                    ingredients.length !== 0 && (
+                    constructorData.bun && (
                         <div className={cn(styles.priceBlock, 'mt-10')}>
                             <div className={cn(styles.price, 'mr-10')}>
-                                <p className={cn("text text_type_digits-medium mr-2")}>610</p>
+                                <p className={cn("text text_type_digits-medium mr-2")}>{constructorData.total}</p>
                                 <div className={cn(styles.priceIcon)}>
                                     <CurrencyIcon/>
                                 </div>
                             </div>
-                            <Button type="primary" size="large" onClick={handleOpenModal}>Оформить заказ</Button>
+                            <Button type="primary" size="large" onClick={handleOrderButtonClick}>Оформить заказ</Button>
                         </div>
                     )
                 }
@@ -100,10 +129,6 @@ function BurgerConstructor({ingredients}) {
             )}
         </>
     );
-};
-
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientType).isRequired,
 };
 
 export default BurgerConstructor;
