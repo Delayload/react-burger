@@ -1,130 +1,185 @@
-import React from "react";
+import React, {useMemo} from "react";
 import cn from "classnames";
-import { ConstructorElement, CurrencyIcon, Button, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import {IngredientsContext} from "../../services/IngredientsContext";
-import {API_URL} from "../../utils/constants";
 import styles from "./BurgerConstructor.module.css";
-import {SET_ORDER} from "../../actions/actions";
+import BurgerConstructorItem from './BurgerConstructorItem/BurgerConstructorItem';
+import { makeOrder } from "../../services/actions/OrderDetails";
+
+import {useDispatch, useSelector} from "react-redux";
+import {burgerConstructorDataSelector, burgerConstructorBunIdSelector} from '../../services/selectors/BurgerConstructor';
+import {createIngredientSelector} from '../../services/selectors/BurgerIngredients';
+import {orderSelector} from '../../services/selectors/OrderDetails';
+
+import {SET_CONSTRUCTOR_INGREDIENT, SET_CONSTRUCTOR_BUN, UPDATE_CONSTRUCOR_IGREDIENTS_DATA} from '../../services/actions/BurgerConstructor';
+import {ORDER_UNSET} from '../../services/actions/OrderDetails';
+
+import { useDrop } from "react-dnd";
 
 function BurgerConstructor() {
-    const {constructorData, dispatchContstucorData} = React.useContext(IngredientsContext);
-    const [modalVisible, setModalVisible] = React.useState(null);
+    const dispatch = useDispatch();
+    const constructorData = useSelector(burgerConstructorDataSelector);
+    const constructorBunId = useSelector(burgerConstructorBunIdSelector);
+    const orderData = useSelector(orderSelector);
+
+    const bunSelector = useMemo(() => createIngredientSelector(constructorBunId), [constructorBunId]);
+    const bun = useSelector(bunSelector);
 
     const handleOrderButtonClick = () => {
-        fetch(`${API_URL}/orders`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({"ingredients": getIngredientsIds()})
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error(response.status)
-            }
-
-            return response.json();
-        }).then(response => {
-            dispatchContstucorData({type: SET_ORDER, payload: response.order.number})
-            handleOpenModal();
-        }).catch(error => {
-            console.log(`Error status ${error}`);
-        })
+        const constructorDataIds = constructorData.map(item => item._id);
+        dispatch(makeOrder([...constructorDataIds, constructorBunId]))
+        handleOpenModal();
     }
 
-    const getIngredientsIds = () => {
-        if (!constructorData.bun || !constructorData.ingredients) {
-            return null;
-        }
+    const [modalVisible, setModalVisible] = React.useState(null);
 
-        return [ constructorData.bun, ...constructorData.ingredients.map(item => item._id)]
-    }
+    const totalPrice = useMemo(() => {
+        const bunPrice = bun ? bun?.price * 2 : 0;
+        const price =
+            bunPrice +
+            constructorData.reduce((acc, item) => {
+                return acc + item.price * item.count;
+            }, 0);
+        return price ? price : 0;
+    }, [constructorData, bun]);
 
     const handleOpenModal = () => {
         setModalVisible(true);
     };
 
     const handleCloseModal = () => {
+        dispatch({type: ORDER_UNSET});
         setModalVisible(false);
     };
+
+    const [{ isHoverBun }, dropTarget] = useDrop({
+        accept: "ingredientBun",
+        collect: (monitor) => ({
+            isHoverBun: monitor.isOver(),
+        }),
+        drop(ingredient) {
+            dispatch({
+                type: SET_CONSTRUCTOR_BUN,
+                _id: ingredient._id,
+            })
+        },
+    });
+    const [{ isHoverMain }, dropTargetMain] = useDrop({
+        accept: "ingredientMain",
+        collect: (monitor) => ({
+            isHoverMain: monitor.isOver(),
+        }),
+        drop(ingredient) {
+            if (constructorData.find(item => item._id === ingredient._id)) {
+                dispatch({
+                    type: UPDATE_CONSTRUCOR_IGREDIENTS_DATA,
+                    data: constructorData.map(item => {
+                        if (item._id === ingredient._id) {
+                            return {
+                                ...item,
+                                count: item.count + 1
+                            };
+                        }
+
+                        return item;
+                    }),
+                });
+            }
+            else {
+                dispatch({
+                    type: SET_CONSTRUCTOR_INGREDIENT,
+                    item: ingredient,
+                });
+            }
+        },
+    });
+
+    const opacityBun = isHoverBun ? "0.5" : "1";
+    const opacityMain = isHoverMain ? "0.5" : "1";
 
     return (
         <>
             <section className={cn(styles.wrapper, 'pt-25')}>
-                <ul className={cn('mb-10', styles.list)}>
+                <ul className={cn('mb-10', styles.list)} ref={dropTarget} style={{ opacity: opacityBun }}>
                     {
-                        constructorData.bun &&  (
-                            <li className={cn('ml-4', 'mr-4', styles.item)}>
+                        bun ?  (
+                            <li className={cn('ml-10', 'mr-4', styles.item)}>
                                 <div className={styles.itemIconWrapper}></div>
                                 <div className={styles.constructorWrapper}>
                                     <ConstructorElement
                                         type="top"
                                         isLocked={true}
-                                        text={`${constructorData.bun.name} (верх)`}
-                                        price={constructorData.bun.price}
-                                        thumbnail={constructorData.bun.image}
+                                        text={`${bun.name} (верх)`}
+                                        price={bun.price}
+                                        thumbnail={bun.image}
                                     />
                                 </div>
                             </li>
+                        ) : (
+                            <div className={styles.itemPlaceHolderContainer}>
+                                <p className={cn('text', 'text text_type_digits-medium')}>Выберите булку (верх)</p>
+                            </div>
                         )
                     }
+                    <div ref={dropTargetMain}>
+                        {
+                            constructorData.length ? (
+                                <ul className={cn(styles.innerList, 'mt-4', 'mb-4')} style={{ opacity: opacityMain, padding: "0" }}>
+                                    {
+                                        constructorData.map((item, index) => (
+                                            <li className={cn('ml-4', 'mr-4', styles.item)} key={item.uuid}>
+                                                <BurgerConstructorItem item={item} index={index}/>
+                                            </li>
+                                        ))
+                                    }
+                                </ul>
+                            ) : (
+                                <div className={styles.itemPlaceHolderContainer}>
+                                    <p className={cn('text', 'text text_type_digits-medium')}>Выберите ингредиент</p>
+                                </div>
+                            )
+                        }
+                    </div>
                     {
-                        constructorData.ingredients && (
-                            <ul className={cn(styles.innerList, 'mt-4', 'mb-4')}>
-                                {
-                                    constructorData.ingredients.map(item => (
-                                        <li className={cn('ml-4', 'mr-4', styles.item)} key={item._id}>
-                                            <div className={styles.itemIconWrapper}>
-                                                <DragIcon type="primary" />
-                                            </div>
-                                            <div className={styles.constructorWrapper}>
-                                                <ConstructorElement
-                                                    text={item.name}
-                                                    price={item.price}
-                                                    thumbnail={item.image}
-                                                />
-                                            </div>
-                                        </li>
-                                    ))
-                                }
-                            </ul>
-                        )
-                    }
-                    {
-                        constructorData.bun &&  (
-                            <li className={cn('ml-4', 'mr-4', styles.item)}>
+                        bun ?  (
+                            <li className={cn('ml-10', 'mr-4', styles.item)}>
                                 <div className={styles.itemIconWrapper}></div>
                                 <div className={styles.constructorWrapper}>
                                     <ConstructorElement
                                         type="bottom"
                                         isLocked={true}
-                                        text={`${constructorData.bun.name} (низ)`}
-                                        price={constructorData.bun.price}
-                                        thumbnail={constructorData.bun.image}
+                                        text={`${bun.name} (низ)`}
+                                        price={bun.price}
+                                        thumbnail={bun.image}
                                     />
                                 </div>
                             </li>
+                        ) : (
+                            <div className={styles.itemPlaceHolderContainer}>
+                                <p className={cn('text', 'text text_type_digits-medium')}>Выберите булку (низ)</p>
+                            </div>
                         )
                     }
                 </ul>
-                {
-                    constructorData.bun && (
-                        <div className={cn(styles.priceBlock, 'mt-10')}>
-                            <div className={cn(styles.price, 'mr-10')}>
-                                <p className={cn("text text_type_digits-medium mr-2")}>{constructorData.total}</p>
-                                <div className={cn(styles.priceIcon)}>
-                                    <CurrencyIcon/>
-                                </div>
-                            </div>
-                            <Button type="primary" size="large" onClick={handleOrderButtonClick}>Оформить заказ</Button>
+                <div className={cn(styles.priceBlock, 'mt-10')}>
+                    <div className={cn(styles.price, 'mr-10')}>
+                        <p className={cn("text text_type_digits-medium mr-2")}>{totalPrice}</p>
+                        <div className={cn(styles.priceIcon)}>
+                            <CurrencyIcon/>
                         </div>
-                    )
-                }
+                    </div>
+                    <Button type="primary" size="large" onClick={handleOrderButtonClick}>Оформить заказ</Button>
+                </div>
             </section>
             { modalVisible && (
                 <Modal onClose={handleCloseModal}>
-                    <OrderDetails/>
+                    {
+                        orderData?.order?.number ? (<OrderDetails number={orderData.order.number}/>) : (
+                            <p>Оформляем заказ...</p>
+
+                        )
+                    }
                 </Modal>
             )}
         </>

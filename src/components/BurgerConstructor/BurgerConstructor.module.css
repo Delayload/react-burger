@@ -2,19 +2,20 @@
     display: flex;
     flex-direction: column;
     align-self: flex-start;
+    width: 100%;
 }
 
 .list {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    height: calc(100vh - 296px);
+    height: calc(100vh - 350px);
 }
 
 .innerList {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 496px);
+    max-height: calc(100vh - 550px);
     overflow-y: auto;
 }
 
@@ -33,18 +34,15 @@
     flex-wrap: nowrap;
 }
 
-.itemIconWrapper {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
+.itemPlaceHolderContainer {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.constructorWrapper {
-    width: 100%;
-}
+.itemPlaceHolderText {
 
-.constructorWrapper > div {
-    width: 100%;
 }
 
 .priceBlock {
