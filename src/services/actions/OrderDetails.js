@@ -17,7 +17,6 @@ export function makeOrder(ids) {
             type: ORDER_REQUEST
         });
         postOrder(ids).then(response => {
-            console.log(response);
             if (response && response.success) {
                 dispatch({
                     type: ORDER_SUCCESS, order: response.order

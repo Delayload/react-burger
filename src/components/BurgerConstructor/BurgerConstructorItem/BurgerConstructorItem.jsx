@@ -30,7 +30,7 @@ function BurgerConstructorItem({item, index}) {
     drag(dropRef(ref));
 
     const handleDelete = (_id) => {
-        dispatch({type: DELETE_CONSTRUCTOR_INGREDIENT, _id})
+        dispatch({type: DELETE_CONSTRUCTOR_INGREDIENT, uuid: item.uuid})
     }
 
     return (

@@ -12,7 +12,7 @@ import {burgerConstructorDataSelector, burgerConstructorBunIdSelector} from '../
 import {createIngredientSelector} from '../../services/selectors/BurgerIngredients';
 import {orderSelector} from '../../services/selectors/OrderDetails';
 
-import {SET_CONSTRUCTOR_INGREDIENT, SET_CONSTRUCTOR_BUN, UPDATE_CONSTRUCOR_IGREDIENTS_DATA} from '../../services/actions/BurgerConstructor';
+import {addIngredient, SET_CONSTRUCTOR_BUN} from '../../services/actions/BurgerConstructor';
 import {ORDER_UNSET} from '../../services/actions/OrderDetails';
 
 import { useDrop } from "react-dnd";
@@ -71,27 +71,7 @@ function BurgerConstructor() {
             isHoverMain: monitor.isOver(),
         }),
         drop(ingredient) {
-            if (constructorData.find(item => item._id === ingredient._id)) {
-                dispatch({
-                    type: UPDATE_CONSTRUCOR_IGREDIENTS_DATA,
-                    data: constructorData.map(item => {
-                        if (item._id === ingredient._id) {
-                            return {
-                                ...item,
-                                count: item.count + 1
-                            };
-                        }
-
-                        return item;
-                    }),
-                });
-            }
-            else {
-                dispatch({
-                    type: SET_CONSTRUCTOR_INGREDIENT,
-                    item: ingredient,
-                });
-            }
+            dispatch(addIngredient(ingredient));
         },
     });
 

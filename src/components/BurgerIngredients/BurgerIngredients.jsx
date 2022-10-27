@@ -1,6 +1,5 @@
 import React, {useRef} from "react";
 import classNames from "classnames";
-import PropTypes from "prop-types";
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsList from "./IngrediensList/IngredientsList";
 import Modal from "../Modal/Modal";
@@ -13,7 +12,7 @@ import {ingredientDetailsDataSelector} from "../../services/selectors/Ingredient
 
 import {UNSET_INGREDIENT} from "../../services/actions/IngredientDetails";
 
-function BurgerIngredients({data}) {
+function BurgerIngredients() {
     const dispatch = useDispatch();
     const rootRef = useRef();
 
@@ -91,9 +90,5 @@ function BurgerIngredients({data}) {
         </>
     );
 }
-
-BurgerIngredients.propTypes = {
-    data: PropTypes.array,
-};
 
 export default BurgerIngredients;

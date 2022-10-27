@@ -1,4 +1,8 @@
-export const API_URL = "https://norma.nomoreparties.space/api";
+import {API_URL} from './constants';
+
+function request(url, options) {
+    return fetch(url, options).then(checkResponse)
+}
 
 function checkResponse(response) {
     if (response.ok)
@@ -10,11 +14,11 @@ function checkResponse(response) {
 }
 
 export function getIngredientsRequest() {
-    return fetch(`${API_URL}/ingredients`).then(checkResponse);
+    return request(`${API_URL}/ingredients`, {});
 }
 
 export function postOrder(ids) {
-    return fetch(`${API_URL}/orders`, {
+    return request(`${API_URL}/orders`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -22,5 +26,5 @@ export function postOrder(ids) {
         body: JSON.stringify({
             ingredients: ids,
         }),
-    }).then(checkResponse);
+    });
 }
