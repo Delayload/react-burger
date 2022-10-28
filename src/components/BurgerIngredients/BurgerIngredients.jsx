@@ -1,48 +1,58 @@
-import React from "react";
+import React, {useRef} from "react";
 import classNames from "classnames";
-import PropTypes from "prop-types";
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsList from "./IngrediensList/IngredientsList";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import styles from "./BurgerIngredients.module.css";
+import {useDispatch, useSelector} from "react-redux";
+import {getIngredients} from "../../services/actions/BurgerIngredients";
+import {ingredientsIdsByCategoriesSelector,} from "../../services/selectors/BurgerIngredients";
+import {ingredientDetailsDataSelector} from "../../services/selectors/IngredientDetails";
 
-function BurgerIngredients({data}) {
+import {UNSET_INGREDIENT} from "../../services/actions/IngredientDetails";
+
+function BurgerIngredients() {
+    const dispatch = useDispatch();
+    const rootRef = useRef();
+
+    const categories = useSelector(ingredientsIdsByCategoriesSelector);
+
+    const ingredientId = useSelector(ingredientDetailsDataSelector);
+
+    React.useEffect(() => {
+        dispatch(getIngredients());
+    }, [dispatch]);
+
     const [currentTab, setCurrentTab] = React.useState(null);
-    const [currentIngredient, setCurrentIngredient] = React.useState(null);
     const itemsRef = React.useRef([]);
 
-    const handleOpenModal = (item) => {
-        setCurrentIngredient(item);
-    };
-
-    const handleCloseModal = () => {
-        setCurrentIngredient(null);
-    };
-
     const onTabClick = (value) => {
-        const index = Object.keys(categories).findIndex((key) => key === value);
-        itemsRef.current[index].scrollIntoView();
+        itemsRef.current[value].scrollIntoView({ behavior: "smooth" });
         setCurrentTab(value);
     }
 
-    const categories = data.reduce((acc, item) => {
-        if (acc[item.type]) {
-            acc[item.type].items.push(item);
-        }
+    const handleCloseModal = () => {
+        dispatch({
+            type: UNSET_INGREDIENT,
+        });
+    };
 
-        return acc;
-    }, {
-        bun: {title: "Булки", items: []},
-        main: {title: "Начинки", items: []},
-        sauce: {title: "Соусы", items: []},
-    });
+    const handleScroll = (e) => {
+        const rootY = rootRef.current.getBoundingClientRect().y;
+        for (var key of Object.keys(itemsRef.current)) {
+            const y = itemsRef.current[key].getBoundingClientRect().y - rootY;
+            if (y > 0 && y < rootY && currentTab !== y) {
+                setCurrentTab(key);
+            }
+        }
+    }
 
     return (
         <>
             <section className={classNames(styles.wrapper, "mt-10")}>
                 <h2 className={classNames("text", "text_type_main-large", "mb-5")}>Соберите бургер</h2>
-                <div className={classNames(styles.tabs, "mb-10")}>
+                <div className={classNames(styles.tabs, "mb-10")} ref={rootRef}>
 
                     <div className={styles.tab}>
                         <Tab active={currentTab === "bun"} value="bun" onClick={onTabClick}>
@@ -60,31 +70,25 @@ function BurgerIngredients({data}) {
                         </Tab>
                     </div>
                 </div>
-                <div className={styles.categories}>
+                <div className={styles.categories} onScroll={handleScroll}>
                     {
-                        Object.keys(categories).map((key, index) => {
-                            return categories[key].items.length !== 0 && (
-                                <div key={key} ref={el => itemsRef.current[index] = el}>
-                                    <IngredientsList items={categories[key].items} title={categories[key].title} handleOpenModal={handleOpenModal}/>
-                                </div>
-                            )
-                        })
+                        Object.entries(categories).map(([key, items]) => items.length !== 0 && (
+                            <div key={key} ref={el => itemsRef.current[key] = el}>
+                                <IngredientsList items={categories[key].items} title={categories[key].title}/>
+                            </div>
+                        ))
                     }
                 </div>
             </section>
             {
-                currentIngredient && (
+                ingredientId && (
                     <Modal title={"Детали ингредиента"} onClose={handleCloseModal}>
-                        <IngredientDetails ingredient={currentIngredient}/>
+                        <IngredientDetails ingredientId={ingredientId}/>
                     </Modal>
                 )
             }
         </>
     );
 }
-
-BurgerIngredients.propTypes = {
-    data: PropTypes.array,
-};
 
 export default BurgerIngredients;

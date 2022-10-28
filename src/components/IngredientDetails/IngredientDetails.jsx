@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useMemo} from "react";
+import {useSelector} from 'react-redux';
 import cn from "classnames";
 import PropTypes from "prop-types";
-import {ingredientType} from '../../utils/types';
 import styles from "./IngredientDetails.module.css";
+import {createIngredientSelector} from "../../services/selectors/BurgerIngredients";
 
-function IngredientDetails({ingredient}) {
+function IngredientDetails({ingredientId}) {
+    const ingredientsSelector = useMemo(() => createIngredientSelector(ingredientId), [ingredientId])
+    const ingredient = useSelector(ingredientsSelector);
+    
     return (
         <div className={styles.wrapper}>
             <img src={ingredient.image} alt={ingredient.name} className={cn('mb-4', styles.image)}/>
@@ -32,7 +36,7 @@ function IngredientDetails({ingredient}) {
 };
 
 IngredientDetails.propTypes = {
-    ingredient: ingredientType.isRequired,
+    ingredientId: PropTypes.string,
 };
 
 export default IngredientDetails;
