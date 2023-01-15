@@ -1,0 +1,16 @@
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: baseline
+}
+
+.inputWrapper {
+    margin-bottom: 24px;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

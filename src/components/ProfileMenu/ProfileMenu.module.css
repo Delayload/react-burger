@@ -1,0 +1,19 @@
+.navWrapper {
+    max-width: 320px;
+}
+
+.navItem {
+    height: 64px;
+}
+
+.navLink {
+    color: var(--link-color);
+}
+
+.activeLink {
+    color: var(--link-active);
+}
+
+.navLink:visited {
+//color: red;
+}

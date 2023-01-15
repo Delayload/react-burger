@@ -1,27 +1,47 @@
-import React from "react";
-import AppHeader from "../AppHeader/AppHeader";
-import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
-import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import styles from "./App.module.css";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import AppHeader from '../AppHeader/AppHeader';
+import { Home, Register, Login, ForgotPassword, ResetPassword, Profile } from '../../pages';
+
+import { Routes } from '../../utils/routes';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
     return (
-        <div>
+        <>
             <AppHeader/>
-            <DndProvider backend={HTML5Backend}>
-                <main className={styles.main}>
-                    <div className={styles.wrapper}>
-                        <BurgerIngredients/>
+            <Switch>
+                <Route path={Routes.home} exact={true}>
+                    <Home/>
+                </Route>
+                <Route path={Routes.register} exact={true}>
+                    <Register/>
+                </Route>
+                <Route path={Routes.login} exact={true}>
+                    <Login/>
+                </Route>
+                <Route path={Routes.forgotPassword} exact={true}>
+                    <ForgotPassword/>
+                </Route>
+                <Route path={Routes.resetPassword} exact={true}>
+                    <ResetPassword/>
+                </Route>
+                <ProtectedRoute path={Routes.profile} exact={true}>
+                    <Profile/>
+                </ProtectedRoute>
+                <ProtectedRoute path={Routes.profileOrders} exact={true}>
+                    <div className={'p-20'}>
+                        История заказов
                     </div>
-                    <div className={styles.wrapper}>
-                        <BurgerConstructor/>
+                </ProtectedRoute>
+                <Route>
+                    <div className={'p-20'}>
+                        <p>404 - not found</p>
                     </div>
-                </main>
-            </DndProvider>
-        </div>
+                </Route>
+            </Switch>
+        </>
     );
 }
 
