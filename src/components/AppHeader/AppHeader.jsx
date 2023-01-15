@@ -3,35 +3,40 @@ import cn from 'classnames';
 
 import styles from './AppHeader.module.css';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link, NavLink, useLocation } from 'react-router-dom';
+
+import { ProfileMenu }  from '../ProfileMenu/ProfileMenu';
 
 function AppHeader() {
+    const location = useLocation();
+
     return (
         <header className={cn(styles.header, 'p-4')}>
             <nav className={styles.navigation}>
                 <ul className={styles.list}>
                     <li className={styles.item}>
-                        <a href="/" className={cn(styles.link, 'p-4')}>
-                            <BurgerIcon type={'primary'}/>
-                            <p className={cn('text', 'text_type_main-default', 'ml-2', styles.activeLink)}>Конструктор</p>
-                        </a>
+                        <NavLink to={'/'} exact={true} className={cn(styles.link, 'p-4')} activeClassName={cn(styles.activeLink, 'p-4')}>
+                            <BurgerIcon type={location.pathname === '/' ? 'primary' : 'secondary' }/>
+                            <p className={cn('text', 'text_type_main-default', 'ml-2')}>Конструктор</p>
+                        </NavLink>
                     </li>
                     <li className={styles.item}>
-                        <a href="/" className={cn(styles.link, 'p-4')}>
-                            <ListIcon type={'secondary'}/>
+                        <NavLink to={'/orders-feed'} exact={true} className={cn(styles.link, 'p-4')} activeClassName={cn(styles.activeLink, 'p-4')}>
+                            <ListIcon type={location.pathname === '/orders-feed' ? 'primary' : 'secondary' }/>
                             <p className={cn('text', 'text_type_main-default', 'ml-2')}>Лента заказов</p>
-                        </a>
+                        </NavLink>
                     </li>
                 </ul>
-                <a href="/" className={styles.link}>
+                <NavLink to={'/'} className={styles.link}>
                     <div className={styles.logo}>
                         <Logo/>
                     </div>
-                </a>
+                </NavLink>
                 <div className={styles.item}>
-                    <a href="/" className={cn(styles.link, 'p-4')}>
-                        <ProfileIcon type={'secondary'}/>
+                    <NavLink to={'/profile'} className={cn(styles.link, 'p-4')} activeClassName={cn(styles.activeLink, 'p-4')}>
+                        <ProfileIcon type={location.pathname === '/profile' ? 'primary' : 'secondary' } />
                         <p className={cn('text', 'text_type_main-default', 'ml-2')}>Личный кабинет</p>
-                    </a>
+                    </NavLink>
                 </div>
             </nav>
         </header>

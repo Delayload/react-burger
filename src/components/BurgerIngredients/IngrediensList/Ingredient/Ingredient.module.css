@@ -28,8 +28,13 @@
     flex-direction: column;
 }
 
+.title {
+    color: var(--text-primary-color);
+}
+
 .text {
     text-align: center;
+    color: var(--text-primary-color);
 }
 
 .counter {

@@ -6,6 +6,7 @@ import OrderDetails from "../OrderDetails/OrderDetails";
 import styles from "./BurgerConstructor.module.css";
 import BurgerConstructorItem from './BurgerConstructorItem/BurgerConstructorItem';
 import { makeOrder } from "../../services/actions/OrderDetails";
+import { useHistory } from 'react-router-dom';
 
 import {useDispatch, useSelector} from "react-redux";
 import {burgerConstructorDataSelector, burgerConstructorBunIdSelector} from '../../services/selectors/BurgerConstructor';
@@ -14,6 +15,9 @@ import {orderSelector} from '../../services/selectors/OrderDetails';
 
 import {addIngredient, SET_CONSTRUCTOR_BUN} from '../../services/actions/BurgerConstructor';
 import {ORDER_UNSET} from '../../services/actions/OrderDetails';
+import {isLoggedInAuthSelector} from '../../services/selectors/auth';
+import { getCookie } from '../../utils/cookie';
+import { Routes } from '../../utils/routes';
 
 import { useDrop } from "react-dnd";
 
@@ -22,11 +26,17 @@ function BurgerConstructor() {
     const constructorData = useSelector(burgerConstructorDataSelector);
     const constructorBunId = useSelector(burgerConstructorBunIdSelector);
     const orderData = useSelector(orderSelector);
+    const isLoggedIn = useSelector(isLoggedInAuthSelector);
+    const history = useHistory();
 
     const bunSelector = useMemo(() => createIngredientSelector(constructorBunId), [constructorBunId]);
     const bun = useSelector(bunSelector);
 
     const handleOrderButtonClick = () => {
+        if (!isAvailableToOrder()) {
+            history.push('/login');
+        }
+
         const constructorDataIds = constructorData.map(item => item._id);
         dispatch(makeOrder([...constructorDataIds, constructorBunId]))
         handleOpenModal();
@@ -77,6 +87,10 @@ function BurgerConstructor() {
 
     const opacityBun = isHoverBun ? "0.5" : "1";
     const opacityMain = isHoverMain ? "0.5" : "1";
+
+    const isAvailableToOrder = () => {
+        return getCookie('token') && isLoggedIn;
+    }
 
     return (
         <>

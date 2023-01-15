@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import {CurrencyIcon, Counter} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Link, useLocation } from 'react-router-dom';
 import styles from "./Ingredient.module.css";
 import {createIngredientSelector} from "../../../../services/selectors/BurgerIngredients";
 import {SET_INGREDIENT} from "../../../../services/actions/IngredientDetails";
@@ -10,10 +11,12 @@ import {
     burgerConstructorBunIdSelector,
     createBurgerConstructortSelector,
 } from '../../../../services/selectors/BurgerConstructor';
+import { Routes } from '../../../../utils/routes';
 
 import {useDrag} from "react-dnd";
 
 function Ingredient({ingredientId}) {
+    const location = useLocation();
     const ingredientsSelector = useMemo(() => createIngredientSelector(ingredientId), [ingredientId]);
     const ingredient = useSelector(ingredientsSelector);
 
@@ -54,11 +57,18 @@ function Ingredient({ingredientId}) {
     });
 
     return (
-        <div className={styles.wrapper} onClick={handleClick} ref={ingredient.type === "bun" ? bunRef : mainRef}>
+        <Link
+            to={{
+                to: `${Routes.ingredients}/${ingredient._id}`,
+                state: { background: location }
+            }}
+            className={styles.wrapper} onClick={handleClick}
+            ref={ingredient.type === "bun" ? bunRef : mainRef}
+        >
             <div className={styles.container}>
                 <img src={ingredient.image} alt={ingredient.name} className={classNames(styles.image, "mb-1")}/>
                 <div className={classNames(styles.price, "mb-1")}>
-                    <p className={classNames("text", "text_type_digits-default", "mr-2")}>{ingredient.price}</p>
+                    <p className={classNames(styles.text, "text", "text_type_digits-default", "mr-2")}>{ingredient.price}</p>
                     <CurrencyIcon type={"primary"}/>
                 </div>
                 <div className={styles.description}>
@@ -70,7 +80,7 @@ function Ingredient({ingredientId}) {
             <div className={styles.counter}>
                 <Counter count={getCountValue()} size="default"/>
             </div>
-        </div>
+        </Link>
     );
 }
 
